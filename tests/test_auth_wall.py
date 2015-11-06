@@ -1,19 +1,23 @@
+from __future__ import unicode_literals
+
 import base64
+
 from django.test import SimpleTestCase
 from django_auth_wall.middleware import BasicAuthMiddleware
+from django_auth_wall import HTTP_HEADER_ENCODING
 
 
 def test_get_header():
     obj = BasicAuthMiddleware()
-    assert obj.auth_header() == 'Basic realm="Development"'
+    assert obj.authenticate_header() == 'Basic realm="Development"'
 
 
 class AuthWallTest(SimpleTestCase):
 
     def get_auth_header(self, username, password):
-        token = base64.b64encode('{0}:{1}'.format(username, password))
+        token = base64.b64encode(':'.join([username, password]).encode(HTTP_HEADER_ENCODING))
         return {
-            'HTTP_AUTHORIZATION': 'Basic ' + token,
+            'HTTP_AUTHORIZATION': b'Basic ' + token,
         }
 
     def test_no_auth_required(self):

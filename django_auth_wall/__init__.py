@@ -2,3 +2,6 @@
 
 __version__ = '0.1.2'
 __author__ = 'Saurabh Kumar <saurabh@saurabh-kumar.com>'
+
+# Header encoding (see RFC5987)
+HTTP_HEADER_ENCODING = 'iso-8859-1'

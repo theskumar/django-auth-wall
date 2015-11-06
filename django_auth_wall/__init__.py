@@ -1,6 +1,6 @@
 """django-auth-wall - Puts your staging site behind a basic auth layer."""
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 __author__ = 'Saurabh Kumar <saurabh@saurabh-kumar.com>'
 
 # Header encoding (see RFC5987)

@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="django-auth-wall",
-    version="0.1.2",
+    version="0.1.3",
     url="https://github.com/theskumar/django-auth-wall",
 
     author="Saurabh Kumar",

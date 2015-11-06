@@ -20,7 +20,7 @@ Handy for quickly securing an entire site during development, for example.
 Usage
 -----
 
-.. code::python
+.. code::
 
     # In settings.py:
 
@@ -35,12 +35,11 @@ Usage
     AUTH_WALL_USERNAME = 'user'
     AUTH_WALL_PASSWORD = 'pass'
 
-    """
 
 Installation
 ------------
 
-.. code::python
+.. code::
 
     pip install django-auth-wall
 

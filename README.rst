@@ -1,7 +1,7 @@
 django-auth-wall
 ================
 
-.. image:: https://pypip.in/v/django-auth-wall/badge.png
+.. image:: https://img.shields.io/pypi/v/django-auth-wall.svg
     :target: https://pypi.python.org/pypi/django-auth-wall
     :alt: Latest PyPI version
 

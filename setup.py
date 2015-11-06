@@ -13,7 +13,6 @@ setuptools.setup(
 
     py_modules=['django_auth_wall'],
     packages=setuptools.find_packages(),
-    install_requires=['django'],
     include_package_data=True,
     zip_safe=False,
     platforms='any',

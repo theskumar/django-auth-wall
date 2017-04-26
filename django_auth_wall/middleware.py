@@ -5,7 +5,9 @@ import os
 
 from django.conf import settings
 from django.http import HttpResponse
+from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import ugettext_lazy as _
+
 
 from django_auth_wall import HTTP_HEADER_ENCODING
 
@@ -26,7 +28,7 @@ def get_authorization_header(request):
     return auth
 
 
-class BasicAuthMiddleware(object):
+class BasicAuthMiddleware(MiddlewareMixin):
     """
     A very basic Basic Auth middleware that uses a username/password defined in
     your environment variable or settings.py as AUTH_WALL_USERNAME and AUTH_WALL_PASSWORD.

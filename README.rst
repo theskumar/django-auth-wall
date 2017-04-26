@@ -24,11 +24,11 @@ Usage
 
     # In settings.py:
 
-    MIDDLEWARE_CLASSES = (
+    MIDDLEWARE = [
         'django_auth_wall.middleware.BasicAuthMiddleware',
 
         # all other middleware here
-    )
+    ]
 
     # Optionally, set it here if not setting as environment variable
     # Requires both variable to be set, else site won't be protected.

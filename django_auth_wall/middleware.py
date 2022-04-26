@@ -5,9 +5,17 @@ import os
 
 from django.conf import settings
 from django.http import HttpResponse
-from django.utils.deprecation import MiddlewareMixin
-from django.utils.translation import ugettext_lazy as _
 
+try:
+    from django.utils.deprecation import MiddlewareMixin
+except ImportError:
+    # >= Django 3.x
+    MiddlewareMixin = object
+try:
+    from django.utils.translation import ugettext_lazy as _
+except ImportError:
+    # >= Django 3.x
+    from django.utils.translation import gettext_lazy as _
 
 from django_auth_wall import HTTP_HEADER_ENCODING
 
@@ -21,8 +29,8 @@ def get_authorization_header(request):
     Return request's 'Authorization:' header, as a bytestring.
     Hide some test client ickyness where the header can be unicode.
     """
-    auth = request.META.get('HTTP_AUTHORIZATION', b'')
-    if isinstance(auth, type('')):
+    auth = request.META.get("HTTP_AUTHORIZATION", b"")
+    if isinstance(auth, type("")):
         # Work around django test client oddness
         auth = auth.encode(HTTP_HEADER_ENCODING)
     return auth
@@ -46,21 +54,24 @@ class BasicAuthMiddleware(MiddlewareMixin):
         # All other middleware
     )
     """
+
     def process_request(self, request):
-        AUTH_WALL_USERNAME = get_env_or_settings('AUTH_WALL_USERNAME')
-        AUTH_WALL_PASSWORD = get_env_or_settings('AUTH_WALL_PASSWORD')
+        AUTH_WALL_USERNAME = get_env_or_settings("AUTH_WALL_USERNAME")
+        AUTH_WALL_PASSWORD = get_env_or_settings("AUTH_WALL_PASSWORD")
 
         if not (AUTH_WALL_USERNAME and AUTH_WALL_PASSWORD):
             return None
 
         auth = get_authorization_header(request).split()
-        if not auth or auth[0].lower() != b'basic':
+        if not auth or auth[0].lower() != b"basic":
             return self.unauthorized_response(request)
 
         try:
-            auth_parts = base64.b64decode(auth[1]).decode(HTTP_HEADER_ENCODING).partition(':')
+            auth_parts = (
+                base64.b64decode(auth[1]).decode(HTTP_HEADER_ENCODING).partition(":")
+            )
         except (TypeError, UnicodeDecodeError):
-            msg = _('Invalid basic header. Credentials not correctly base64 encoded.')
+            msg = _("Invalid basic header. Credentials not correctly base64 encoded.")
             raise Exception(msg)
         username, password = auth_parts[0], auth_parts[2]
 
@@ -70,12 +81,14 @@ class BasicAuthMiddleware(MiddlewareMixin):
         return self.unauthorized_response(request)
 
     def unauthorized_response(self, request):
-        response = HttpResponse("""<html><title>Authorization Required</title><body>
-                                <h1>Authorization Required</h1></body></html>""")
-        response['WWW-Authenticate'] = self.authenticate_header()
+        response = HttpResponse(
+            """<html><title>Authorization Required</title><body>
+                                <h1>Authorization Required</h1></body></html>"""
+        )
+        response["WWW-Authenticate"] = self.authenticate_header()
         response.status_code = 401
         return response
 
     def authenticate_header(self):
-        www_authenticate_realm = get_env_or_settings('AUTH_WALL_REALM', "Development")
+        www_authenticate_realm = get_env_or_settings("AUTH_WALL_REALM", "Development")
         return 'Basic realm="%s"' % www_authenticate_realm
